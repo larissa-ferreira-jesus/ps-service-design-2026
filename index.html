@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Service Design — Resultados comerciais 2026</title>
+<style>
+:root{
+  --bg:#f5f7fa; --card:#ffffff; --ink:#1d2433; --muted:#5b6578; --line:#dfe4ec;
+  --brand:#1f4e8c; --brand-2:#4f8fd6; --ok:#1e7b4a; --warn:#b26a00; --bad:#b03a3a; --soft:#eef3fa;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1420; --card:#171f2f; --ink:#e7ecf4; --muted:#9aa6bb; --line:#2a3550; --brand:#7fb2f0; --brand-2:#4f8fd6; --soft:#1d2a40;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1420; --card:#171f2f; --ink:#e7ecf4; --muted:#9aa6bb; --line:#2a3550; --brand:#7fb2f0; --brand-2:#4f8fd6; --soft:#1d2a40;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 48px}
+header.top{background:var(--brand);color:#fff;border-radius:14px;padding:22px 24px;margin-bottom:16px}
+header.top h1{margin:0 0 4px;font-size:24px}
+header.top p{margin:0;opacity:.9;font-size:14px}
+.filters{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:18px;position:sticky;top:0;z-index:5}
+.filters label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.filters select{min-width:200px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+.filters .hint{font-size:12px;color:var(--muted);flex:1;min-width:220px}
+button.btn{background:var(--brand);color:#fff;border:0;border-radius:8px;padding:8px 14px;font:inherit;cursor:pointer}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:16px}
+section h2{margin:0 0 4px;font-size:19px;color:var(--brand)}
+section .sub{margin:0 0 14px;color:var(--muted);font-size:13px}
+p{margin:8px 0}
+.msgs{counter-reset:m;padding:0;list-style:none;margin:0}
+.msgs li{counter-increment:m;display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.msgs li:first-child{border-top:0}
+.msgs li::before{content:counter(m);min-width:26px;height:26px;border-radius:50%;background:var(--soft);color:var(--brand);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:6px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--soft)}
+.card .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.card .v{font-size:24px;font-weight:700;margin:4px 0 2px}
+.card .d{font-size:13px}
+.card .f{font-size:12px;color:var(--muted);margin-top:6px;border-top:1px dashed var(--line);padding-top:6px}
+.up{color:var(--ok)} .down{color:var(--bad)} .flat{color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{font-size:12px;color:var(--muted);font-weight:600;background:var(--soft);position:sticky;top:0}
+th:first-child,td:first-child{text-align:left}
+td.note{white-space:normal;text-align:left;color:var(--muted);font-size:13px}
+tr.total td{font-weight:700;border-top:2px solid var(--line)}
+.tablewrap{overflow-x:auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:820px){.grid2{grid-template-columns:1fr}.filters select{min-width:150px}}
+.chart{width:100%;height:auto}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--muted);margin:4px 0}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.callout{border-left:4px solid var(--brand-2);background:var(--soft);padding:10px 14px;border-radius:8px;margin:12px 0;font-size:14px}
+.warn{border-left-color:var(--warn)}
+.formula{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:12px 0;font-size:14px}
+.formula .t{font-weight:700;color:var(--brand);margin-bottom:4px}
+.formula .line{margin:3px 0;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+.small{font-size:12px;color:var(--muted)}
+details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0;background:var(--card)}
+details summary{cursor:pointer;font-weight:600;color:var(--brand)}
+details p, details li{font-size:14px}
+footer{font-size:12px;color:var(--muted);text-align:center;margin-top:18px}
+@media print{
+  body{background:#fff;color:#000;font-size:11px}
+  .filters,button.btn{display:none !important}
+  section{break-inside:avoid;border:1px solid #bbb;box-shadow:none}
+  header.top{background:#fff;color:#000;border:1px solid #999}
+  details{display:block} details > *{display:block}
+  details summary{display:none}
+  .card{background:#fff} th{background:#fff}
+  .wrap{max-width:none;padding:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <h1>Service Design — Resultados comerciais 2026</h1>
+  <p>Período: 01/01 a 19/10 de 2026, comparado com 01/01 a 19/10 de 2025 · Fonte: aba “Propostas” da planilha “PS | Propostas Service Design” · Data de referência: 19/10/2026 · Booking = receita total da proposta · MRR = receita mensal da proposta</p>
+</header>
+
+<div class="filters">
+  <label>BU
+    <select id="fBU"><option value="all">Todas as BUs</option></select>
+  </label>
+  <label>Tipo de proposta
+    <select id="fTipo"><option value="all">Todos os tipos</option></select>
+  </label>
+  <div class="hint">Os filtros atualizam cartões, comparativo, mensal, pipeline e tabelas de tipo/BU. Margens e top clientes não são filtrados (ver metodologia).</div>
+  <button class="btn" onclick="window.print()">Versão para impressão</button>
+</div>
+
+<!-- 1. RESUMO EXECUTIVO -->
+<section id="resumo">
+  <h2>1. Resumo executivo</h2>
+  <p class="sub">Cinco mensagens baseadas nos dados. Valores sem filtro.</p>
+  <ol class="msgs">
+    <li><div><strong>Volume subiu, booking caiu.</strong> Em 2026 a área enviou 433 propostas (+25,9% sobre 344 em 2025) e fechou 167 negócios (+25,6%). Porém o booking enviado somou R$ 99,1 mi (−49,0%) e o booking dos negócios ganhos somou R$ 51,9 mi (−22,6%).</div></li>
+    <li><div><strong>A queda é de ticket, não de volume.</strong> O ticket médio de booking das propostas enviadas caiu 59,5% (de R$ 564,6 mil para R$ 228,8 mil), e a mediana caiu 47,2%. Já o MRR médio das propostas enviadas caiu 25,4% (de R$ 102,6 mil para R$ 76,5 mil mensais), o que mostra que a queda do booking é maior que a da receita mensal.</div></li>
+    <li><div><strong>Win rate melhorou; conversão observada recuou.</strong> Entre decisões concluídas, o win rate foi de 59,2% em 2026 (+12,6 pp). Já a conversão observada das propostas enviadas em 2026 foi de 29,8% (−8,6 pp), mas parte disso é maturação: propostas recentes tiveram menos tempo para fechar.</div></li>
+    <li><div><strong>Renovação sustenta o resultado.</strong> Renovação de Contrato respondeu por 58,0% do booking ganho (R$ 30,1 mi em 56 negócios) com apenas 52 propostas enviadas. Projeto Novo teve 353 envios e gerou 40,0% do booking (R$ 20,8 mi).</div></li>
+    <li><div><strong>Concentração alta e pipeline a validar.</strong> Os cinco maiores clientes concentram 57,4% do booking ganho, e a Stellantis sozinha responde por 24,3%. No pipeline aberto (230 propostas, R$ 81,9 mi de booking somados sem ponderação), R$ 36,8 mi estão em “sem assessment”, status que exige validação antes de qualquer projeção.</div></li>
+  </ol>
+</section>
+
+<!-- 2. INDICADORES -->
+<section id="indicadores">
+  <h2>2. Indicadores principais de 2026 e comparação com 2025</h2>
+  <p class="sub">Período: 01/01 a 19/10. Abertos usam data de abertura; enviadas, data de envio; ganhos, data do ganho. Variação em % e, em taxas, em pontos percentuais (pp).</p>
+  <div class="cards" id="cards"></div>
+  <div class="formula" id="formulas"></div>
+  <div class="tablewrap">
+    <table id="tblKpi">
+      <thead><tr><th>Indicador</th><th>2026</th><th>2025</th><th>Var. absoluta</th><th>Var. %</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>Booking × MRR.</strong> Ticket médio e booking são calculados sobre a <em>receita total</em> da proposta (booking, o valor contratado no total). O MRR médio é a média da <em>receita mensal</em> da proposta. Não somamos receita total com parcelas mensais. A natureza recorrente da receita mensal ainda deve ser confirmada com Finanças antes de tratá-la como MRR definitivo.
+  </div>
+  <div class="callout">
+    <strong>Conversão e win rate.</strong> A conversão observada é calculada sobre as propostas enviadas em cada ano (ganhos com status atual ÷ propostas enviadas no ano); é um recorte de coorte, e não um dado histórico de fechamento. O win rate é ganhos ÷ (ganhos + perdidos), entre decisões concluídas. A base não tem data da perda, então não há taxa de fechamento histórica por ano. Negócios enviados em 2026 tiveram menos tempo para converter.
+  </div>
+  <p class="small"><strong>Cobertura:</strong> 1.235 linhas com conteúdo na aba, das quais 1.183 têm deal id. Há 27 negócios com status ganho sem data válida do ganho (excluídos da comparação de ganhos por data). Propostas sem data de envio válida: 1 (excluída do recorte de envios). MRR médio: 417 propostas enviadas e 156 ganhos em 2026 têm receita mensal válida (2025: 322 e 121).</p>
+</section>
+
+<!-- 3. EVOLUÇÃO MENSAL -->
+<section id="mensal">
+  <h2>3. Evolução mensal (2026)</h2>
+  <p class="sub">Propostas enviadas (data de envio) e negócios ganhos (data do ganho), por mês, de janeiro a outubro de 2026 (até 19/10). Respeita os filtros de BU e tipo.</p>
+  <div class="legend"><span><span class="sw" style="background:var(--brand-2)"></span>Propostas enviadas (quantidade)</span><span><span class="sw" style="background:var(--ok)"></span>Negócios ganhos (quantidade)</span></div>
+  <svg id="chartMes" class="chart" viewBox="0 0 900 300" role="img" aria-label="Envios e ganhos mensais 2026"></svg>
+  <div class="tablewrap"><table id="tblMes"><thead><tr><th>Mês (2026)</th><th>Enviadas</th><th>Ganhos</th></tr></thead><tbody></tbody></table></div>
+  <p class="small">Mês de outubro é parcial (01 a 19/10). Os ganhos de agosto (8) e outubro (8) são os menores do ano; a leitura por mês tem baixa amostra e deve ser usada como tendência, não como meta.</p>
+</section>
+
+<!-- 4. RESULTADOS POR BU -->
+<section id="bus">
+  <h2>4. Resultados por BU</h2>
+  <p class="sub">Siglas preservadas como na base: MACC, GACC, STACC, TACC, Global, SMB, NEW BIZ e Blip. GACC e Global são separadas. Respeita o filtro de tipo de proposta.</p>
+  <div class="tablewrap"><table id="tblBU">
+    <thead><tr>
+      <th>BU</th><th>Enviadas 2026</th><th>Enviadas 2025</th><th>Ganhos 2026</th><th>Conv. observada 2026</th><th>Conv. observada 2025</th><th>Booking ganho 2026</th><th>Booking ganho 2025</th><th>Var. booking %</th><th>Ticket booking 2026</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <p class="small">Margem por BU (ponderada pelo valor da proposta, ganhos de 2026, sem filtro de tipo): Projeto — GACC 21,0% (55 negócios), MACC 24,8% (35), STACC 27,0% (8), TACC 28,6% (9), Global 47,2% (5), SMB 39,0% (1); Blip sem margem informada. D4S — GACC 19,5% (14), MACC 25,0% (23), STACC 27,2% (7), TACC 26,6% (6); Global e SMB sem margem D4S informada. Conversão observada usa coorte de envio; ganhos e booking usam data do ganho.</p>
+  <div class="callout"><strong>Leitura.</strong> GACC segue como maior base de booking, mas o booking ganho caiu 6% sobre 2025 com 136 envios. MACC teve a maior queda (−55%), apesar de ter aumentado os envios (123 contra 108). STACC e Global cresceram em volume, mas com conversão baixa na Global (9,7% sobre 72 envios).</div>
+</section>
+
+<!-- 5. MIX, TICKET E MARGENS -->
+<section id="mix">
+  <h2>5. Mix de propostas, ticket e margens</h2>
+  <p class="sub">Tipo de proposta, com destaque para Projeto Novo, Renovação de Contrato e Data4Services. Respeita o filtro de BU.</p>
+  <div class="tablewrap"><table id="tblTipo">
+    <thead><tr><th>Tipo de proposta</th><th>Enviadas 2026</th><th>Ganhos 2026</th><th>Booking ganho 2026</th><th>% do booking ganho</th><th>Ticket booking 2026</th><th>MRR médio ganhos 2026</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <div class="grid2">
+    <div>
+      <h3 style="margin:14px 0 6px;font-size:15px">Margens (valor ponderado, não consolidado)</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Componente</th><th>Margem 2026</th><th>Negócios c/ margem 2026</th><th>Margem todo o histórico</th><th>Negócios c/ margem (histórico)</th></tr></thead>
+        <tbody>
+          <tr><td>Projeto</td><td>23,3%</td><td>113</td><td>31,9%</td><td>284</td></tr>
+          <tr><td>D4S</td><td>22,9%</td><td>50</td><td>30,5%</td><td>109</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">Projeto e D4S não são somados: a margem consolidada exigiria reconciliar os pesos por componente, o que não foi validado. A ponderação usa a receita total do negócio como proxy de peso; não é a receita de cada componente. Cobertura: 284 de 390 ganhos (72,8%) têm margem Projeto e 109 têm margem D4S com valor. Ausência de margem não foi tratada como zero. Média simples não foi usada.</p>
+    </div>
+    <div>
+      <h3 style="margin:14px 0 6px;font-size:15px">Ciclo e envelhecimento (2026)</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Indicador</th><th>Valor</th><th>Base</th></tr></thead>
+        <tbody>
+          <tr><td>Mediana de dias entre envio e ganho</td><td>15 dias</td><td>127 ganhos com datas válidas</td></tr>
+          <tr><td>Mediana de dias desde o envio (propostas em andamento)</td><td>84 dias</td><td>216 propostas em andamento com data de envio</td></tr>
+          <tr><td>Subsídio informado como “Sim” (ganhos 2026)</td><td>25 de 123 (20,3%)</td><td>Booking destes: R$ 10,3 mi (19,8% do booking ganho 2026)</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">Respostas de subsídio normalizadas (“Sim”, “SIM”, “Não”, “Nâo”, “não”, “0”). O valor do subsídio não foi somado porque o campo traz vários formatos. Mediana de abertura até envio não calculada nesta versão.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. CLIENTES -->
+<section id="clientes">
+  <h2>6. Clientes e concentração</h2>
+  <p class="sub">Booking ganho em 2026 (data do ganho), por cliente. Não filtrado por BU ou tipo.</p>
+  <div class="grid2">
+    <div class="tablewrap"><table>
+      <thead><tr><th>Cliente</th><th>Booking ganho 2026</th><th>% do total</th></tr></thead>
+      <tbody>
+        <tr><td>Stellantis</td><td>R$ 12,60 mi</td><td>24,3%</td></tr>
+        <tr><td>Banco Pan</td><td>R$ 4,91 mi</td><td>9,5%</td></tr>
+        <tr><td>Claro</td><td>R$ 4,77 mi</td><td>9,2%</td></tr>
+        <tr><td>Bradesco</td><td>R$ 3,81 mi</td><td>7,3%</td></tr>
+        <tr><td>Dell</td><td>R$ 3,70 mi</td><td>7,1%</td></tr>
+        <tr><td>Alelo</td><td>R$ 2,80 mi</td><td>5,4%</td></tr>
+        <tr><td>Itaú</td><td>R$ 2,21 mi</td><td>4,3%</td></tr>
+        <tr><td>ENEL</td><td>R$ 2,04 mi</td><td>3,9%</td></tr>
+      </tbody>
+    </table></div>
+    <div>
+      <div class="cards" style="grid-template-columns:1fr 1fr">
+        <div class="card"><div class="k">Clientes com ganho</div><div class="v">47</div><div class="d">2025: 34 · +38,2%</div></div>
+        <div class="card"><div class="k">Clientes com envio</div><div class="v">135</div><div class="d">2025: 102 · +32,4%</div></div>
+        <div class="card"><div class="k">Top 5 · participação</div><div class="v">57,4%</div><div class="d">R$ 29,8 mi de R$ 51,9 mi</div></div>
+        <div class="card"><div class="k">Stellantis · participação</div><div class="v">24,3%</div><div class="d">Ganhos de 2026 em 3 negócios; 2 deles são renovações</div></div>
+      </div>
+      <p class="small">A Stellantis tem dois dos negócios de maior valor de renovação (linhas 654 e 655 da aba), somando R$ 9,05 mi; o restante do total do cliente vem de outro negócio. Ver linhas de origem na seção 9. Dependência de grandes negócios: um cliente responde por quase um quarto do booking de 2026.</p>
+    </div>
+  </div>
+  <div class="callout warn"><strong>Visão por DM e KAM/KAE.</strong> A base traz DM Responsável, KAM/KAE e Responsável proposta. Uma leitura por pessoa exige contexto de carteira (quantidade de contas e tamanho), que a base não tem de forma consistente. Esta visão fica como próximo passo, e não entra como ranking neste relatório.</div>
+</section>
+
+<!-- 7. PIPELINE E 2027 -->
+<section id="pipeline">
+  <h2>7. Pipeline atual e perspectiva para 2027</h2>
+  <p class="sub">Pipeline = propostas em status aberto (backlog, validação de SD, apresentação ao KAE, proposta com KAE, proposta com cliente, sem assessment). Respeita os filtros de BU e tipo.</p>
+  <div class="cards" id="cardsPipe"></div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Status atual</th><th>Negócios</th><th>Booking (receita total)</th><th>% do pipeline aberto</th></tr></thead>
+    <tbody>
+      <tr><td>6. proposta com KAE</td><td>194</td><td>R$ 42,28 mi</td><td>51,6%</td></tr>
+      <tr><td>13. sem assessment</td><td>6</td><td>R$ 36,79 mi</td><td>44,9%</td></tr>
+      <tr><td>7. proposta com cliente</td><td>19</td><td>R$ 2,06 mi</td><td>2,5%</td></tr>
+      <tr><td>1. backlog</td><td>5</td><td>R$ 0,11 mi</td><td>0,1%</td></tr>
+      <tr><td>3. em validação de SD</td><td>3</td><td>R$ 0,36 mi</td><td>0,4%</td></tr>
+      <tr><td>5. em apresentação ao KAE</td><td>3</td><td>R$ 0,25 mi</td><td>0,3%</td></tr>
+      <tr class="total"><td>Total aberto (sem filtro)</td><td>230</td><td>R$ 81,85 mi</td><td>100%</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout warn"><strong>Não é pipeline ponderado.</strong> A coluna de chance não é confiável como probabilidade: há conflitos entre status e %Chance (ex.: “sem assessment” com 100% ganha; propostas com KAE com chance 20%, 50%, 80% e 90%). Por isso o valor do pipeline não foi ponderado. Um pipeline ponderado só seria válido após validar o status e a chance de cada negócio.</div>
+  <h3 style="margin:14px 0 6px;font-size:15px">Perspectiva 2027 — valores mensais programados (jan a out/27), rotulados por natureza</h3>
+  <div class="cards">
+    <div class="card"><div class="k">Programado de negócios ganhos</div><div class="v" id="p27g">—</div><div class="d">Soma das parcelas mensais Projeto + D4S, jan a out/27. É programação, não faturamento garantido.</div></div>
+    <div class="card"><div class="k">Potencial de oportunidades abertas</div><div class="v" id="p27o">—</div><div class="d">Mesma soma, apenas para o pipeline aberto. Não é receita e não é ponderado.</div></div>
+  </div>
+  <p class="small">Parcelas mensais de 2027 são colunas de previsão de alocação por mês; não são faturamento realizado. Valores 2027 de negócios ganhos (R$ 9,80 mi) e abertos (R$ 23,42 mi) ficam separados do booking contratado. Concentração no pipeline: a maior parte do potencial aberto de 2027 está em “proposta com KAE” e “sem assessment”.</p>
+  <h3 style="margin:14px 0 6px;font-size:15px">Distribuição atual do universo (1.235 linhas)</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Categoria</th><th>Quantidade</th><th>% do total</th></tr></thead>
+    <tbody>
+      <tr><td>Ganho</td><td>390</td><td>31,6%</td></tr>
+      <tr><td>Perdido</td><td>377</td><td>30,5%</td></tr>
+      <tr><td>Cancelado</td><td>158</td><td>12,8%</td></tr>
+      <tr><td>Em andamento (abertos)</td><td>230</td><td>18,6%</td></tr>
+      <tr><td>On hold</td><td>64</td><td>5,2%</td></tr>
+      <tr><td>Parceiros</td><td>16</td><td>1,3%</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 8. PRIORIDADES -->
+<section id="prioridades">
+  <h2>8. Prioridades para discussão em 2027</h2>
+  <p class="sub">Cada prioridade traz a evidência, a hipótese e a pergunta a validar. Não há metas nem projeções aqui.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th style="text-align:left">Prioridade</th><th style="text-align:left">Evidência (fato)</th><th style="text-align:left">Hipótese</th><th style="text-align:left">Pergunta para validação</th></tr></thead>
+    <tbody>
+      <tr>
+        <td style="white-space:normal">1. Filtrar o funil antes do KAE</td>
+        <td class="note">194 propostas em “proposta com KAE” (R$ 42,3 mi) e 6 em “sem assessment” (R$ 36,8 mi). Conversão observada caiu de 38,4% para 29,8%.</td>
+        <td class="note">Parte do volume enviado tem qualificação fraca; um gate de assessment antes do envio elevaria a conversão.</td>
+        <td class="note">Qual é o critério real de envio ao KAE, e quantas propostas com KAE estão paradas há mais de 84 dias?</td>
+      </tr>
+      <tr>
+        <td style="white-space:normal">2. Tratar renovação como base de receita</td>
+        <td class="note">Renovação: 58% do booking ganho com 52 envios. Projeto Novo: 40% do booking com 353 envios.</td>
+        <td class="note">A carteira de renovação é a fonte mais previsível de 2027; Projeto Novo tem alto custo de venda por valor gerado.</td>
+        <td class="note">Quais contratos de renovação vencem em 2027 e qual é a cobertura do KAE para eles?</td>
+      </tr>
+      <tr>
+        <td style="white-space:normal">3. Reduzir dependência de grandes clientes</td>
+        <td class="note">Top 5 = 57,4% do booking ganho; a Stellantis = 24,3%, em negócios de renovação.</td>
+        <td class="note">Sem expansão de base, uma renovação atrasada ou perdida afeta o ano inteiro.</td>
+        <td class="note">Qual é o plano de expansão para os 10 maiores clientes e o risco de cada renovação?</td>
+      </tr>
+      <tr>
+        <td style="white-space:normal">4. Rever a estratégia da Global e da MACC</td>
+        <td class="note">Global: 72 envios, conversão de 9,7%. MACC: booking ganho −55% com envios em alta (123 contra 108).</td>
+        <td class="note">Há problema de aderência de oferta ou de qualificação nessas BUs, e não de capacidade comercial.</td>
+        <td class="note">Os envios da Global são de outro perfil de oferta? O que mudou nos negócios da MACC entre 2025 e 2026?</td>
+      </tr>
+      <tr>
+        <td style="white-space:normal">5. Corrigir a base antes de planejar 2027</td>
+        <td class="note">27 ganhos sem data válida; 12 registros com data do ganho mas status não ganho; 33 IDs repetidos (68 linhas); 52 linhas sem ID; datas em texto.</td>
+        <td class="note">Metas e previsões de 2027 ficarão frágeis enquanto status, datas e IDs não forem consistentes.</td>
+        <td class="note">Quem é dono de status, data do ganho e deal id? Há um processo de validação mensal?</td>
+      </tr>
+    </tbody>
+  </table></div>
+  <p class="small"><strong>Fatos:</strong> todos os números das prioridades estão nas seções 2 a 7. <strong>Hipóteses:</strong> a coluna “Hipótese”. <strong>Perguntas:</strong> a última coluna, para validar com os officers antes do planejamento.</p>
+</section>
+
+<!-- 9. METODOLOGIA -->
+<section id="metodologia">
+  <h2>9. Metodologia e qualidade dos dados</h2>
+  <p class="sub">Fonte, critérios, exclusões e fórmulas. Os números-chave têm referência às linhas de origem na aba Propostas.</p>
+  <p><strong>Fonte.</strong> Aba “Propostas” da planilha “PS | Propostas Service Design” (gid=0), lida em 19/10/2026. O conector do Drive devolveu a aba “Pipe full”; a aba Propostas foi lida diretamente, e só ela foi usada.</p>
+  <p><strong>Unidade de linha.</strong> Cada linha é uma proposta ou componente. Um deal id pode aparecer em mais de uma linha (33 IDs repetidos, 68 linhas). Não agrupei por ID: cada linha foi contada como registro, e linhas sem ID não foram agrupadas entre si.</p>
+  <p><strong>Datas.</strong> Aceitei dd/mm/aaaa, d/m/aaaa, dd/mm/aa e aaaa-mm-dd. Datas em texto (“Dezembro”, “Agosto”, “Janeiro”, “não está no app”) foram excluídas. Uma data ambígua (linha 403, “4/12/2025”) foi lida como 4 de dezembro, padrão brasileiro; é premissa a confirmar.</p>
+  <p><strong>Período.</strong> 01/01 a 19/10 de 2026 e 01/01 a 19/10 de 2025. Abertos usam a data de abertura; enviadas, a data de envio; ganhos, a data do ganho. Nenhuma data futura foi encontrada.</p>
+  <p><strong>Booking e MRR.</strong> Booking = “receita total” da proposta, usado em todos os valores, tickets e medianas deste relatório. Validei que, em 694 de 975 linhas com valores, receita total = receita mensal × vigência (quando a vigência está preenchida). MRR médio = média da “receita mensal” das propostas com valor válido (maior que zero). Ticket médio não usa MRR. Não somei receita total com parcelas mensais, e a receita mensal não foi confirmada como recorrente.</p>
+  <p><strong>Status e chance.</strong> Status é a referência. Há conflitos: 6 registros “sem assessment” com 100% ganha; 12 registros com data do ganho e status não ganho; 1 perdido com chance “Cancelado”. Ganho exige status “8. deal ganho”, e não apenas chance de 100%.</p>
+  <p><strong>BUs.</strong> Preservadas como na base: MACC, GACC, STACC, TACC, Global, SMB, NEW BIZ, Blip. Não converti para segmentos.</p>
+  <p><strong>Cobertura de margens e valores.</strong> Booking: 1.235 linhas com conteúdo. Margem Projeto: 284 de 390 ganhos. Margem D4S: 109 de 390 com valor. Ausência não foi tratada como zero.</p>
+  <p><strong>Limites.</strong> Não há histórico de status em 19/10/2025: o status é atual, não uma fotografia do passado. A conversão de coorte usa o status atual das propostas enviadas em cada ano. Margens e top clientes não são filtrados pelos seletores.</p>
+
+  <details>
+    <summary>Fórmulas e critérios de inclusão</summary>
+    <ul>
+      <li><strong>Abertos (ano):</strong> linhas com data de abertura válida dentro do período.</li>
+      <li><strong>Enviadas (ano):</strong> linhas com data de envio válida dentro do período. Booking enviado = soma da receita total dessas linhas.</li>
+      <li><strong>Ganhos (ano, por data):</strong> status “8. deal ganho” com data do ganho válida dentro do período. Booking ganho = soma da receita total.</li>
+      <li><strong>Conversão observada (coorte):</strong> enviadas no ano com status atual “8. deal ganho” ÷ enviadas no ano. 2026: 129 ÷ 433 = 29,8%. 2025: 132 ÷ 344 = 38,4%.</li>
+      <li><strong>Win rate:</strong> ganhos da coorte ÷ (ganhos da coorte + perdidos da coorte). 2026: 129 ÷ (129 + 89) = 59,2%. 2025: 132 ÷ (132 + 151) = 46,6%.</li>
+      <li><strong>Ticket médio (booking):</strong> booking ÷ quantidade. Ticket enviado 2026 = R$ 99.075.208 ÷ 433 = R$ 228.811.</li>
+      <li><strong>MRR médio:</strong> soma da receita mensal ÷ quantidade de propostas com receita mensal válida e maior que zero. Enviadas 2026 = R$ 31.910.996 ÷ 417 = R$ 76.527.</li>
+      <li><strong>Mediana:</strong> valor central da lista ordenada de booking.</li>
+      <li><strong>Variação em pp:</strong> diferença entre duas taxas (ex.: 59,2% − 46,6% = +12,6 pp).</li>
+      <li><strong>Pipeline aberto:</strong> status backlog, validação de SD, apresentação ao KAE, proposta com KAE, proposta com cliente e sem assessment. Valor sem ponderação.</li>
+      <li><strong>Programado 2027:</strong> soma das colunas mensais jan/27 a out/27 (Projeto e D4S).</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Exclusões</summary>
+    <ul>
+      <li>52 linhas sem deal id (42 vazias e 10 com “sem deal”): mantidas na contagem de registros, sem agrupamento.</li>
+      <li>4 ganhos com data do ganho em texto (linhas 466, 471, 606, 640): fora da comparação de ganhos por data.</li>
+      <li>23 ganhos com data do ganho vazia: fora da comparação de ganhos por data, mantidos no status.</li>
+      <li>2 registros não ganhos com texto na data do ganho (linhas 755 e 758): não entram em ganhos.</li>
+      <li>1 proposta sem data de envio válida (linha 761, “-”): fora de enviadas.</li>
+      <li>Receita mensal vazia ou zero: fora do cálculo de MRR médio, sem tratar como zero.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Linhas de origem dos números principais</summary>
+    <ul>
+      <li><strong>Maiores ganhos de 2026 (booking):</strong> linha 654 (Stellantis, R$ 6,05 mi), 646 (Dell, R$ 3,70 mi), 655 (Stellantis, R$ 3,00 mi), 486 (Banco Pan, R$ 2,76 mi), 928 (Bradesco, R$ 2,74 mi), 521 (Claro, R$ 2,37 mi), 835 (Itaú, R$ 2,03 mi), 764 (GM, R$ 2,01 mi).</li>
+      <li><strong>Conflito status × chance:</strong> linha 996 (perdido com “Cancelado”).</li>
+      <li><strong>Ganhos sem data válida:</strong> linhas 262, 287, 311, 315, 422, 466, 471, 475, 513, 548, 574, 584, 606, 627, 640, 652, 670, 691, 696, 706, 740, 789, 834, 838, 914, 1134, 1152.</li>
+      <li><strong>Datas em texto:</strong> linhas 466, 471, 606, 640, 755, 758; envio “-” na linha 761.</li>
+    </ul>
+  </details>
+
+  <p class="small">Conferência de reconciliação: os cartões, as tabelas por BU e tipo e o mensal somam ao total do período (2026: 542 abertos, 433 enviadas, 167 ganhos, R$ 99.075.208 enviado, R$ 51.908.400 ganho; 2025: 430, 344, 133, R$ 194.236.809 e R$ 67.080.291). Diferenças de centavos vêm de arredondamento.</p>
+</section>
+
+<footer>Service Design · Relatório executivo · Base: aba Propostas em 19/10/2026 · Contagens em quantidade de registros, valores em R$ (booking = receita total), MRR = receita mensal, taxas em %, variações de taxas em pp.</footer>
+
+</div>
+
+<script>
+// Agregados por BU|tipo calculados a partir da aba Propostas (19/10/2026).
+// Índices: 0 abertos26, 1 enviadas26, 2 ganhos coorte26, 3 perdidos coorte26, 4 ganhos por data26, 5 booking ganho26, 6 booking enviado26,
+// 7 abertos25, 8 enviadas25, 9 ganhos coorte25, 10 perdidos coorte25, 11 ganhos por data25, 12 booking ganho25, 13 booking enviado25,
+// 14 envios por mês26 (10 posições), 15 ganhos por mês26 (10 posições), 16 abertos (qtd), 17 booking abertos, 18 programado 2027 ganhos, 19 potencial 2027 abertos.
+const AGG = {"MACC|Projeto Novo":[119,97,24,23,27,2111582,26457293,76,67,11,41,11,2258255,37236859,[5,3,6,7,11,14,16,7,18,10],[0,0,2,0,2,6,5,3,5,4],47,15235241,967296,7054535],"TACC|Projeto Novo":[27,24,8,10,9,348933,2608636,38,28,7,17,9,2453388,48392114,[1,1,3,2,2,8,3,3,1,0],[1,0,1,0,1,2,2,1,1,0],5,722128,0,0],"STACC|Renovação de Contrato":[4,2,0,0,1,297818,2280369,1,1,1,0,1,1786909,1786909,[0,0,0,0,0,0,0,0,0,2],[1,0,0,0,0,0,0,0,0,0],2,2280369,0,1875960],"GACC|Projeto Novo":[115,102,30,26,37,8436644,15271979,128,100,40,46,36,14370953,47704187,[12,5,7,11,6,7,16,10,22,6],[3,4,2,4,6,3,7,2,3,3],45,5668744,98065,402617],"GACC|Renovação de Contrato":[28,22,17,2,26,16721038,12142916,20,21,14,4,19,11237242,8992071,[4,0,4,6,3,1,3,1,0,0],[5,3,4,4,3,3,2,0,2,0],9,37125394,632403,10219260],"GACC|Data4Services":[10,10,4,4,4,49549,289563,14,8,6,2,4,122675,365588,[1,0,3,1,0,0,2,2,1,0],[0,1,1,0,0,0,0,1,1,0],2,25208,0,0],"MACC|Renovação de Contrato":[29,19,15,2,23,8995081,7634978,18,13,13,0,19,24239451,21043311,[0,2,6,2,4,0,2,2,0,1],[2,1,4,5,3,3,2,0,3,0],1,42764,4468815,0],"GACC|Parceiros":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"MACC|Parceiros":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"MACC|Data4Services":[7,3,0,2,0,0,133247,21,15,5,8,5,13434,252607,[2,0,1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],1,55490,0,0],"TACC|Conectividade Constante API":[0,0,0,0,0,0,0,1,1,0,1,0,0,1800,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"STACC|Projeto Novo":[58,46,12,10,14,9610007,12023373,7,7,3,3,2,96333,4228630,[1,0,2,3,4,4,4,5,16,7],[0,1,0,1,3,3,2,0,4,0],25,8159087,2613472,1975198],"GACC|Conectividade Constante API":[1,2,1,0,1,43200,89120,0,0,0,0,0,0,0,[1,0,0,0,0,0,1,0,0,0],[0,1,0,0,0,0,0,0,0,0],1,45920,0,0],"TACC|Renovação de Contrato":[5,6,5,0,6,4113766,3497802,12,10,8,1,12,8870473,9369494,[2,2,1,0,0,0,0,0,1,0],[1,2,1,0,0,0,1,0,1,0],0,0,847035,0],"GACC|Extensão de Contrato":[1,0,0,0,0,0,0,3,3,3,0,4,197907,76905,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"MACC|Conectividade Constante API":[5,1,0,0,3,372168,3707,8,6,2,3,3,293374,105421,[0,0,0,0,0,0,0,0,0,1],[0,0,0,2,0,1,0,0,0,0],1,3707,154884,0],"Blip|Projeto Novo":[5,4,3,0,1,3808,411477,2,2,2,0,0,0,895786,[1,0,0,0,2,0,0,1,0,0],[0,0,0,0,0,0,0,1,0,0],0,0,19175,0],"Global|Renovação de Contrato":[2,2,0,0,0,0,138156,1,1,0,0,0,0,86609,[0,0,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],3,224765,0,0],"Global|Projeto Novo":[95,69,7,3,8,213350,8797172,29,25,4,10,0,0,2442873,[1,5,12,12,2,9,8,9,4,7],[1,0,1,0,0,5,0,0,0,1],74,9481041,0,655824],"NEW BIZ|Consulting":[0,0,0,0,0,0,0,2,3,0,2,0,0,591686,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"TACC|Consulting":[0,0,0,0,0,0,0,3,1,0,1,0,0,28000,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"TACC|Data4Services":[3,2,0,1,0,0,15692,6,3,1,1,1,13920,71116,[0,0,0,0,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],1,7433,0,0],"NEW BIZ|Projeto Novo":[0,0,0,0,0,0,0,13,9,3,5,0,0,5079208,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"GACC|Consulting":[0,0,0,0,0,0,0,3,3,2,1,2,633253,807885,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"MACC|Consulting":[1,1,0,1,0,0,177768,4,3,0,3,0,0,301818,[0,0,1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"TACC|Incremento de Time":[0,0,0,0,0,0,0,1,1,1,0,0,0,27486,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"STACC|Consulting":[2,2,0,0,0,0,623045,1,1,0,1,0,0,368879,[0,0,0,0,0,0,0,0,2,0],[0,0,0,0,0,0,0,0,0,0],2,623045,0,275554],"MACC|Incremento de Time":[0,0,0,0,0,0,0,5,4,1,1,1,141176,961408,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"GACC|Incremento de Time":[0,0,0,0,0,0,0,2,2,2,0,2,296608,296608,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"TACC|Extensão de Contrato":[0,0,0,0,0,0,0,2,2,2,0,2,54940,54940,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"SMB|Conectividade Constante API":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"SMB|Data4Services":[1,0,0,0,0,0,0,1,1,0,0,0,0,36857,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"SMB|Projeto Novo":[12,11,1,4,2,42564,2950250,7,3,1,0,0,0,2629754,[1,0,0,0,3,1,2,1,3,0],[0,1,0,0,1,0,0,0,0,0],6,2046282,0,930360],"NEW BIZ|Renovação de Contrato":[1,1,0,0,0,0,3192001,0,0,0,0,0,0,0,[0,1,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],0,0,0,0],"MACC|Extensão de Contrato":[4,1,0,1,3,514672,194310,0,0,0,0,0,0,0,[0,1,0,0,0,0,0,0,0,0],[3,0,0,0,0,0,0,0,0,0],0,0,0,0],"STACC|Attention Services":[1,1,1,0,1,28911,28911,0,0,0,0,0,0,0,[0,0,1,0,0,0,0,0,0,0],[0,0,0,0,0,1,0,0,0,0],0,0,0,0],"Global|Data4Services":[1,1,0,0,0,0,8251,0,0,0,0,0,0,0,[0,0,1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],1,8251,0,2539],"MACC|Attention Services":[1,1,0,0,0,0,76462,0,0,0,0,0,0,0,[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],1,76462,0,25000],"STACC|Conectividade Constante API":[1,1,0,0,0,0,1224,0,0,0,0,0,0,0,[0,0,0,0,0,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],1,1224,0,0],"Global|Conectividade Constante API":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],1,0,0,0],"STACC|Data4Services":[2,2,1,0,1,5309,27506,0,0,0,0,0,0,0,[0,0,0,0,0,0,0,0,2,0],[0,0,0,0,0,0,0,0,1,0],1,22196,0,0]};
+
+// MRR: receita mensal por BU|tipo. [soma receita mensal ganhos26, n ganhos26, soma receita mensal enviadas26, n enviadas26, soma ganhos25, n ganhos25, soma enviadas25, n enviadas25]
+const RM = {"MACC|Renovação de Contrato":[2315760.89,23,1966447.24,19,1986289.88,15,1225909.18,9],"GACC|Renovação de Contrato":[2275608.19,22,1895316.62,18,2878735.52,17,1739917.72,17],"TACC|Renovação de Contrato":[554460.45,6,821934.09,6,1320249.69,12,1157124.54,10],"GACC|Projeto Novo":[2079878.15,37,8175108.4,102,3052794.79,34,11637156.54,98],"MACC|Projeto Novo":[1447244.62,25,7383762.31,93,506171.56,10,6772986.98,64],"NEW BIZ|Consulting":[0,0,0,0,0,0,253262.62,3],"TACC|Consulting":[0,0,0,0,0,0,28000,1],"MACC|Data4Services":[0,0,10203.32,2,13433.5,5,136912.86,15],"MACC|Conectividade Constante API":[79414,3,3706.71,1,33862,3,47821,6],"GACC|Consulting":[0,0,0,0,94694.05,2,171508.71,3],"TACC|Projeto Novo":[286556.36,8,1281292.16,22,474720.14,8,4800519.23,27],"STACC|Projeto Novo":[1633605.09,14,4245608.59,46,63242.5,2,648719.09,6],"Global|Projeto Novo":[213350.24,5,3859173.91,66,0,0,1296026.38,24],"NEW BIZ|Projeto Novo":[0,0,0,0,0,0,905565.12,6],"STACC|Renovação de Contrato":[297818.19,1,216812.75,2,297818.19,1,297818.19,1],"Global|Renovação de Contrato":[0,0,138156.25,2,0,0,43304.39,1],"MACC|Consulting":[0,0,177767.73,1,0,0,176660.42,3],"GACC|Data4Services":[35549.22,4,179402.87,10,79114.28,4,220506.9,7],"TACC|Incremento de Time":[0,0,0,0,0,0,27486.02,1],"STACC|Consulting":[0,0,209713.09,2,0,0,61479.85,1],"MACC|Incremento de Time":[0,0,0,0,70587.97,1,312223.24,3],"TACC|Conectividade Constante API":[0,0,0,0,0,0,1800,1],"GACC|Incremento de Time":[0,0,0,0,59321.63,2,59321.63,2],"GACC|Extensão de Contrato":[0,0,0,0,76905.49,3,76905.49,3],"TACC|Extensão de Contrato":[0,0,0,0,54940,1,54940,1],"TACC|Data4Services":[0,0,15692.18,2,10180,1,67376.42,3],"SMB|Data4Services":[0,0,0,0,0,0,27946.85,1],"SMB|Projeto Novo":[42564.26,2,895480.83,11,0,0,514678.1,3],"Blip|Projeto Novo":[3807.5,1,91874.75,4,0,0,256834.78,2],"MACC|Extensão de Contrato":[417516.67,3,0,0,0,0,0,0],"NEW BIZ|Renovação de Contrato":[0,0,228000.1,1,0,0,0,0],"STACC|Attention Services":[28910.9,1,28910.9,1,0,0,0,0],"Global|Data4Services":[0,0,6981.48,1,0,0,0,0],"MACC|Attention Services":[0,0,5000,1,0,0,0,0],"GACC|Conectividade Constante API":[0,0,45920,1,0,0,0,0],"STACC|Conectividade Constante API":[0,0,1224.22,1,0,0,0,0],"STACC|Data4Services":[5309.38,1,27505.56,2,0,0,0,0]};
+
+// Margens por BU (ganhos 2026, ponderadas pelo valor da proposta): [n Projeto, margem Projeto %, n D4S, margem D4S %]
+const MARG = {GACC:[55,21.0,14,19.5],MACC:[35,24.8,23,25.0],STACC:[8,27.0,7,27.2],TACC:[9,28.6,6,26.6],Global:[5,47.2,0,null],SMB:[1,39.0,0,null],"NEW BIZ":[0,null,0,null],Blip:[0,null,0,null]};
+const BUS = ["MACC","GACC","STACC","TACC","Global","SMB","NEW BIZ","Blip"];
+
+const fmtN = n => Math.round(n).toLocaleString('pt-BR');
+const fmtR = n => 'R$ ' + Math.round(n).toLocaleString('pt-BR');
+const fmtMi = n => 'R$ ' + (n/1e6).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' mi';
+const fmtP = (x,d=1) => x===null||isNaN(x) ? '—' : (x*100).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})+'%';
+const fmtPP = x => (x>=0?'+':'') + (x*100).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' pp';
+const fmtVar = (a,b) => !b ? 'sem base de comparação' : ((a-b)/b>=0?'+':'') + ((a-b)/b*100).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';
+const fmtAbs = (a,b,money=false) => ((a-b)>=0?'+':'') + (money?fmtR(a-b):fmtN(a-b));
+
+function sel(bu,tipo){
+  const r = Array(20).fill(0).map((_,i)=> (i===14||i===15)? Array(10).fill(0) : 0);
+  for (const k in AGG){
+    const [b,t] = k.split('|');
+    if((bu==='all'||b===bu)&&(tipo==='all'||t===tipo)){
+      const a = AGG[k];
+      for(let i=0;i<20;i++){
+        if(i===14||i===15){ for(let m=0;m<10;m++) r[i][m]+=a[i][m]; }
+        else r[i]+=a[i];
+      }
+    }
+  }
+  return r;
+}
+
+function selRM(bu,tipo){
+  const r=[0,0,0,0,0,0,0,0];
+  for (const k in RM){
+    const [b,t]=k.split('|');
+    if((bu==='all'||b===bu)&&(tipo==='all'||t===tipo)){ RM[k].forEach((v,i)=>r[i]+=v); }
+  }
+  return r;
+}
+
+function kpis(r){
+  const conv26 = r[1]?r[2]/r[1]:null, conv25 = r[8]?r[9]/r[8]:null;
+  const win26 = (r[2]+r[3])?r[2]/(r[2]+r[3]):null, win25=(r[9]+r[10])?r[9]/(r[9]+r[10]):null;
+  return {
+    a26:r[0],a25:r[7],e26:r[1],e25:r[8],g26:r[4],g25:r[11],
+    ev26:r[6],ev25:r[13],v26:r[5],v25:r[12],
+    c26:r[2],p26:r[3],c25:r[9],p25:r[10],
+    tEnv26: r[1]?r[6]/r[1]:null, tEnv25: r[8]?r[13]/r[8]:null,
+    tGan26: r[4]?r[5]/r[4]:null, tGan25: r[11]?r[12]/r[11]:null,
+    conv26, conv25, win26, win25
+  };
+}
+
+function renderKpis(bu,tipo){
+  const r = sel(bu,tipo);
+  const k = kpis(r);
+  const m = selRM(bu,tipo);
+  const mrrG26 = m[1]?m[0]/m[1]:null, mrrG25 = m[5]?m[4]/m[5]:null;
+  const mrrE26 = m[3]?m[2]/m[3]:null, mrrE25 = m[7]?m[6]/m[7]:null;
+  const cards = [
+    ['Oportunidades abertas', fmtN(k.a26), 'vs 2025: '+fmtN(k.a25)+' ('+fmtVar(k.a26,k.a25)+')', k.a26>=k.a25, ''],
+    ['Propostas enviadas', fmtN(k.e26), 'vs 2025: '+fmtN(k.e25)+' ('+fmtVar(k.e26,k.e25)+')', k.e26>=k.e25, ''],
+    ['Negócios ganhos (data do ganho)', fmtN(k.g26), 'vs 2025: '+fmtN(k.g25)+' ('+fmtVar(k.g26,k.g25)+')', k.g26>=k.g25, ''],
+    ['Booking enviado', fmtMi(k.ev26), 'vs 2025: '+fmtMi(k.ev25)+' ('+fmtVar(k.ev26,k.ev25)+')', k.ev26>=k.ev25, 'Soma da receita total das propostas enviadas'],
+    ['Booking ganho', fmtMi(k.v26), 'vs 2025: '+fmtMi(k.v25)+' ('+fmtVar(k.v26,k.v25)+')', k.v26>=k.v25, 'Soma da receita total dos negócios ganhos'],
+    ['Ticket médio (booking) ganhos', k.tGan26?fmtR(k.tGan26):'—', 'vs 2025: '+(k.tGan25?fmtR(k.tGan25):'—')+' ('+fmtVar(k.tGan26||0,k.tGan25||0)+')', (k.tGan26||0)>=(k.tGan25||0), 'Booking ÷ negócios ganhos. Não usa MRR'],
+    ['MRR médio (ganhos)', mrrG26?fmtR(mrrG26):'—', 'vs 2025: '+(mrrG25?fmtR(mrrG25):'—')+' ('+fmtVar(mrrG26||0,mrrG25||0)+')', (mrrG26||0)>=(mrrG25||0), 'Receita mensal média dos negócios ganhos'],
+    ['MRR médio (enviadas)', mrrE26?fmtR(mrrE26):'—', 'vs 2025: '+(mrrE25?fmtR(mrrE25):'—')+' ('+fmtVar(mrrE26||0,mrrE25||0)+')', (mrrE26||0)>=(mrrE25||0), 'Receita mensal média das propostas enviadas'],
+    ['Conversão observada (coorte)', fmtP(k.conv26), 'vs 2025: '+fmtP(k.conv25)+' ('+(k.conv26!==null&&k.conv25!==null?fmtPP(k.conv26-k.conv25):'—')+')', (k.conv26||0)>=(k.conv25||0), ''],
+    ['Win rate (decisões concluídas)', fmtP(k.win26), 'vs 2025: '+fmtP(k.win25)+' ('+(k.win26!==null&&k.win25!==null?fmtPP(k.win26-k.win25):'—')+')', (k.win26||0)>=(k.win25||0), ''],
+  ];
+  document.getElementById('cards').innerHTML = cards.map(c=>`<div class="card"><div class="k">${c[0]}</div><div class="v">${c[1]}</div><div class="d ${c[3]?'up':'down'}">${c[2]}</div>${c[4]?`<div class="small">${c[4]}</div>`:''}</div>`).join('');
+
+  const conv26s = k.conv26===null?'—':`${k.c26} ÷ ${k.e26} = ${fmtP(k.conv26)}`;
+  const conv25s = k.conv25===null?'—':`${k.c25} ÷ ${k.e25} = ${fmtP(k.conv25)}`;
+  const win26s = k.win26===null?'—':`${k.c26} ÷ (${k.c26} + ${k.p26}) = ${fmtP(k.win26)}`;
+  const win25s = k.win25===null?'—':`${k.c25} ÷ (${k.c25} + ${k.p25}) = ${fmtP(k.win25)}`;
+  document.getElementById('formulas').innerHTML = `
+    <div class="t">Como calculamos (filtro atual: BU ${bu==='all'?'todas':bu} · tipo ${tipo==='all'?'todos':tipo})</div>
+    <div class="line"><strong>Win rate 2026:</strong> ganhos ÷ (ganhos + perdidos) = ${win26s}</div>
+    <div class="line"><strong>Win rate 2025:</strong> ganhos ÷ (ganhos + perdidos) = ${win25s}</div>
+    <div class="line"><strong>Conversão observada 2026:</strong> ganhos da coorte ÷ enviadas = ${conv26s}</div>
+    <div class="line"><strong>Conversão observada 2025:</strong> ganhos da coorte ÷ enviadas = ${conv25s}</div>
+    <div class="small" style="margin-top:6px">Win rate usa decisões concluídas (ganho ou perdido). Conversão observada usa propostas enviadas no ano e seu status atual. Não é taxa de fechamento histórica.</div>`;
+
+  const rows = [
+    ['Oportunidades abertas (data de abertura)', k.a26, k.a25, false],
+    ['Propostas enviadas (data de envio)', k.e26, k.e25, false],
+    ['Negócios ganhos (data do ganho)', k.g26, k.g25, false],
+    ['Booking enviado (receita total, R$)', k.ev26, k.ev25, true],
+    ['Booking ganho (receita total, R$)', k.v26, k.v25, true],
+    ['Ticket médio de booking, enviadas (R$)', k.tEnv26, k.tEnv25, true],
+    ['Ticket médio de booking, ganhos (R$)', k.tGan26, k.tGan25, true],
+    ['MRR médio, enviadas (receita mensal, R$)', mrrE26, mrrE25, true],
+    ['MRR médio, ganhos (receita mensal, R$)', mrrG26, mrrG25, true],
+  ];
+  let html = rows.map(([n,a,b,mo])=>`<tr><td>${n}</td><td>${mo?(a?fmtR(a):'—'):fmtN(a)}</td><td>${mo?(b?fmtR(b):'—'):fmtN(b)}</td><td>${(a!==null&&b!==null&&a!==undefined&&b!==undefined)?fmtAbs(a,b,mo):'—'}</td><td>${fmtVar(a||0,b||0)}</td></tr>`).join('');
+  html += `<tr><td>Conversão observada (coorte de envio)</td><td>${fmtP(k.conv26)}</td><td>${fmtP(k.conv25)}</td><td>${k.conv26!==null&&k.conv25!==null?fmtPP(k.conv26-k.conv25):'—'}</td><td>taxa, em pp</td></tr>`;
+  html += `<tr><td>Win rate (ganhos ÷ ganhos+perdidos)</td><td>${fmtP(k.win26)}</td><td>${fmtP(k.win25)}</td><td>${k.win26!==null&&k.win25!==null?fmtPP(k.win26-k.win25):'—'}</td><td>taxa, em pp</td></tr>`;
+  document.querySelector('#tblKpi tbody').innerHTML = html;
+}
+
+function renderMensal(bu,tipo){
+  const r = sel(bu,tipo);
+  const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out'];
+  const env = r[14], gan = r[15];
+  const max = Math.max(1, ...env, ...gan);
+  const W=900,H=300,pad=40,bw=(W-pad*2)/10;
+  let svg='';
+  const ticks=5;
+  for(let t=0;t<=ticks;t++){ const v=Math.round(max*t/ticks); const y=H-pad-(H-pad*2)*t/ticks; svg+=`<line x1="${pad}" x2="${W-pad}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${pad-6}" y="${y+4}" font-size="11" text-anchor="end" fill="var(--muted)">${fmtN(v)}</text>`; }
+  for(let i=0;i<10;i++){
+    const x=pad+i*bw+bw*0.15, w=bw*0.32;
+    const he=(H-pad*2)*env[i]/max, hg=(H-pad*2)*gan[i]/max;
+    svg+=`<rect x="${x}" y="${H-pad-he}" width="${w}" height="${he}" fill="var(--brand-2)" rx="3"><title>${meses[i]}: ${env[i]} enviadas</title></rect>`;
+    svg+=`<rect x="${x+w+4}" y="${H-pad-hg}" width="${w}" height="${hg}" fill="var(--ok)" rx="3"><title>${meses[i]}: ${gan[i]} ganhos</title></rect>`;
+    svg+=`<text x="${pad+i*bw+bw/2}" y="${H-pad+16}" font-size="12" text-anchor="middle" fill="var(--muted)">${meses[i]}</text>`;
+    svg+=`<text x="${x+w/2}" y="${H-pad-he-4}" font-size="10" text-anchor="middle" fill="var(--ink)">${env[i]}</text>`;
+    svg+=`<text x="${x+w+4+w/2}" y="${H-pad-hg-4}" font-size="10" text-anchor="middle" fill="var(--ink)">${gan[i]}</text>`;
+  }
+  document.getElementById('chartMes').innerHTML = svg;
+  document.querySelector('#tblMes tbody').innerHTML = meses.map((m,i)=>`<tr><td>${m}${i===9?' (até 19/10)':''}</td><td>${env[i]}</td><td>${gan[i]}</td></tr>`).join('') + `<tr class="total"><td>Total</td><td>${fmtN(env.reduce((a,b)=>a+b,0))}</td><td>${fmtN(gan.reduce((a,b)=>a+b,0))}</td></tr>`;
+}
+
+function renderBU(tipo){
+  const rows = BUS.map(b=>{
+    const r = sel(b,tipo);
+    const conv26 = r[1]?r[2]/r[1]:null, conv25 = r[8]?r[9]/r[8]:null;
+    return {b, e26:r[1], e25:r[8], g26:r[4], conv26, conv25, v26:r[5], v25:r[12], tick: r[4]?r[5]/r[4]:null};
+  });
+  const all = sel('all',tipo);
+  const tot = rows.reduce((a,x)=>({e26:a.e26+x.e26,e25:a.e25+x.e25,g26:a.g26+x.g26,v26:a.v26+x.v26,v25:a.v25+x.v25}),{e26:0,e25:0,g26:0,v26:0,v25:0});
+  let html = rows.map(x=>`<tr><td>${x.b}</td><td>${fmtN(x.e26)}</td><td>${fmtN(x.e25)}</td><td>${fmtN(x.g26)}</td><td>${fmtP(x.conv26)}</td><td>${fmtP(x.conv25)}</td><td>${fmtR(x.v26)}</td><td>${fmtR(x.v25)}</td><td>${fmtVar(x.v26,x.v25)}</td><td>${x.tick===null?'—':fmtR(x.tick)}</td></tr>`).join('');
+  html += `<tr class="total"><td>Total</td><td>${fmtN(tot.e26)}</td><td>${fmtN(tot.e25)}</td><td>${fmtN(tot.g26)}</td><td>${fmtP(tot.e26?all[2]/tot.e26:null)}</td><td>${fmtP(tot.e25?all[9]/tot.e25:null)}</td><td>${fmtR(tot.v26)}</td><td>${fmtR(tot.v25)}</td><td>${fmtVar(tot.v26,tot.v25)}</td><td>${tot.g26?fmtR(tot.v26/tot.g26):'—'}</td></tr>`;
+  document.querySelector('#tblBU tbody').innerHTML = html;
+}
+
+function renderTipo(bu){
+  const tipos = [...new Set(Object.keys(AGG).map(k=>k.split('|')[1]))].sort((a,b)=>{const pri=['Projeto Novo','Renovação de Contrato','Data4Services']; return (pri.indexOf(a)+1||9)-(pri.indexOf(b)+1||9) || a.localeCompare(b)});
+  const totalGan = sel(bu,'all')[5];
+  let html='';
+  tipos.forEach(t=>{
+    const r = sel(bu,t);
+    if(r[1]===0 && r[4]===0 && r[5]===0) return;
+    const m = selRM(bu,t);
+    html += `<tr><td>${t}</td><td>${fmtN(r[1])}</td><td>${fmtN(r[4])}</td><td>${fmtR(r[5])}</td><td>${totalGan?fmtP(r[5]/totalGan):'—'}</td><td>${r[4]?fmtR(r[5]/r[4]):'—'}</td><td>${m[1]?fmtR(m[0]/m[1]):'—'}</td></tr>`;
+  });
+  const t = sel(bu,'all'); const mt = selRM(bu,'all');
+  html += `<tr class="total"><td>Total</td><td>${fmtN(t[1])}</td><td>${fmtN(t[4])}</td><td>${fmtR(t[5])}</td><td>100,0%</td><td>${t[4]?fmtR(t[5]/t[4]):'—'}</td><td>${mt[1]?fmtR(mt[0]/mt[1]):'—'}</td></tr>`;
+  document.querySelector('#tblTipo tbody').innerHTML = html;
+}
+
+function renderPipe(bu,tipo){
+  const r = sel(bu,tipo);
+  document.getElementById('cardsPipe').innerHTML = [
+    ['Negócios em aberto', fmtN(r[16]), 'sem ponderação de chance'],
+    ['Booking em aberto (receita total)', fmtMi(r[17]), 'soma simples; não é pipeline ponderado'],
+  ].map(c=>`<div class="card"><div class="k">${c[0]}</div><div class="v">${c[1]}</div><div class="d small">${c[2]}</div></div>`).join('');
+  document.getElementById('p27g').textContent = fmtMi(r[18]);
+  document.getElementById('p27o').textContent = fmtMi(r[19]);
+}
+
+function renderAll(){
+  const bu = document.getElementById('fBU').value;
+  const tipo = document.getElementById('fTipo').value;
+  renderKpis(bu,tipo);
+  renderMensal(bu,tipo);
+  renderBU(tipo);
+  renderTipo(bu);
+  renderPipe(bu,tipo);
+}
+
+(function init(){
+  const bus = document.getElementById('fBU');
+  BUS.forEach(b=>{const o=document.createElement('option');o.value=b;o.textContent=b;bus.appendChild(o)});
+  const tipos = [...new Set(Object.keys(AGG).map(k=>k.split('|')[1]))].sort();
+  const ft = document.getElementById('fTipo');
+  tipos.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;ft.appendChild(o)});
+  bus.addEventListener('change',renderAll);
+  ft.addEventListener('change',renderAll);
+  renderAll();
+})();
+</script>
+</body>
+</html>
